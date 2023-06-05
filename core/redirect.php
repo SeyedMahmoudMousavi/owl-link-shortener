@@ -4,8 +4,8 @@ session_start();
 /**
  * Add IRON ELEPHANT library to project
  */
-require_once __DIR__ . "/main.php";
-require_once 'vendor/autoload.php';
+require_once __DIR__ . "/../main.php";
+require_once '../vendor/autoload.php';
 
 use IronElephant\Connection;
 use IronElephant\Security;
@@ -20,7 +20,7 @@ $uri = trim($_SERVER['REQUEST_URI'], "/");
 
 // If short suffix uri is empty return to home
 if (et($uri)) {
-	finsish();
+	finish();
 }
 
 // Get long url from database
@@ -29,8 +29,8 @@ $long_url = urldecode($long_url);
 
 // If long url is not found this addres is wrong
 if (et($long_url)) {
-	$_SESSION["error"] = "آدرس وجود ندارد";
-	finsish();
+	$_SESSION["error"] = "There is no address";
+	finish();
 } else {
 
 	// Get count of visited link from data

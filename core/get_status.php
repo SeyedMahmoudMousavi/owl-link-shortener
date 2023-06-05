@@ -5,8 +5,8 @@ session_start();
 /**
  * Add IRON ELEPHANT library to project
  */
-require_once __DIR__ . "/main.php";
-require_once 'vendor/autoload.php';
+require_once __DIR__ . "/../main.php";
+require_once '../vendor/autoload.php';
 
 use IronElephant\Connection;
 use IronElephant\Security;
@@ -18,6 +18,12 @@ if (is_post()) {
 	// Connect to database
 	$db = new Connection(HOST_NAME, USER_NAME, USER_PASSWORD, DATABASE_NAME);
 
+	if (!isset($_POST['link'])) {
+		analyze_finish();
+	}
+
+	$_SESSION['link'] = $_POST['link'];
+
 	// Get link from analyze.php file
 	$link = $_POST['link'];
 
@@ -28,14 +34,14 @@ if (is_post()) {
 	if (et($link)) {
 
 		// If $link value is empty
-		$_SESSION["error"] = "لینک مورد نظر را وارد کنید";
-		analyze_finsish();
+		$_SESSION["error"] = "Enter the desired link";
+		analyze_finish();
 	}
 	if (!Security::webAddressValidate($link) || strpos($link, WEB_ADDRESS) !== 0) {
 
 		// Check $link value for wrong address
-		$_SESSION["error"] = "لینک را اشتباه وارد کردید";
-		analyze_finsish();
+		$_SESSION["error"] = "You entered the wrong link";
+		analyze_finish();
 	}
 
 	// Remove main web address from link
@@ -48,11 +54,11 @@ if (is_post()) {
 		"short_url='$short_url'"
 	);
 
-	// If short url not founded 
+	// If short url not found
 	if (empty($link_status)) {
 
-		$_SESSION["error"] = "لینک را اشتباه وارد کردید";
-		analyze_finsish();
+		$_SESSION["error"] = "You entered the wrong link";
+		analyze_finish();
 	}
 
 	// Get data for user
@@ -61,5 +67,5 @@ if (is_post()) {
 	$_SESSION['visit'] = $link_status[0]['visit'];
 	$_SESSION['last_visit_date'] = $link_status[0]['last_visit_date'];
 	$_SESSION['create_date'] = $link_status[0]['create_date'];
-	analyze_finsish();
+	analyze_finish();
 }

@@ -1,0 +1,27 @@
+body {
+  background-image: url("owl-background.jpg");
+  background-size: contain;
+  background-repeat: repeat;
+  font-family: "Montserrat" !important;
+  font-weight: normal;
+  font-style: normal;
+}
+#up {
+  display: none;
+  position: fixed;
+  bottom: 30px;
+  right: 10px;
+}
+.audiowide {
+  font-family: "Audiowide";
+  font-weight: normal;
+  font-style: normal;
+}
+.vonique {
+  font-family: "Vonique 64";
+  font-weight: bold;
+  font-style: italic;
+}
+.h-120{
+  height: 120px;
+}

@@ -18,93 +18,100 @@ require_once 'vendor/autoload.php';
     <link rel="icon" type="image/png" sizes="32x32" href="resources/fav/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="resources/fav/favicon-16x16.png">
     <link rel="manifest" href="resources/fav/site.webmanifest">
-    <style>
-        body {
-            background-image: url("resources/owl-background.jpg");
-            background-size: contain;
-            background-repeat: repeat;
-        }
-
-        #up {
-            display: none;
-            position: fixed;
-            bottom: 30px;
-            right: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="resources/bootstrap-5.3.0-dist/css/bootstrap.min.css">
+    <script src="resources/bootstrap-5.3.0-dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="resources/font-family.css">
+    <link rel="stylesheet" href="resources/style.css">
 </head>
 
 <body>
+
     <!-- header -->
-    <div id="header">
-        <!--w3-pale-yellow -->
-        <h1>Link shortener</h1>
-        <h1>Streamline, track and manage your links</h1>
+    <div class="container-fluid bg-dark text-white p-5 rounded-5 w-75 mt-2 shadow border-bottom border-end border-start border-5 border-info">
+        <h1 class="text-center vonique"><b><strong>OWL</strong></b> Link shortener</h1>
+        <h2 class="text-center vonique">Streamline, track and manage your links</h2>
     </div>
-    <!-- error -->
-    <div id="error">
+    <!-- Form -->
+    <div class="container-fluid bg-light p-5 rounded-5 text-center mt-2">
+
+        <!-- Error -->
         <?php if (issv("error")) : ?>
-            <p>
-                <?= rsv("error"); ?>
-            </p>
+            <div id="error" class="alert alert-danger alert-dismissible w-75 mx-auto">
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                <p>
+                    <?= rsv("error"); ?>
+                </p>
+            </div>
         <?php endif; ?>
-    </div>
-    <!-- created link -->
-    <div>
-        <?php if (issv('short_url')) : ?>
-            <?php
-            $short_url = WEB_ADDRESS . "/" . $_SESSION['short_url']; ?>
-            <p>
-                <?= $short_url; ?>
-            </p>
+        <!-- New link -->
+        <?php if (issv('new_short_link')) : ?>
+            <?php $new_short_link = WEB_ADDRESS . "/" . $_SESSION['new_short_link']; ?>
+            <!-- QR code show -->
+            
+            <div id="error" class="alert alert-success alert-dismissible w-75 mx-auto">
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                <p>
+                    <?= $new_short_link; ?>
+                </p>
+                <img class="img-fluid border border-dark" src="<?= create_qr($new_short_link, WEB_ADDRESS) ?> ">
+            </div>
         <?php endif; ?>
+        <!-- Created link -->
+        <form method="post" action="core/create.php">
+            <div class="input-group my-4 shadow">
+                <span class="input-group-text bg-success text-white">URL : </span>
+                <input class="form-control" autofocus type="text" name="long_url" value="<?php if (issv('long_url')) {
+                                                                                                esv('long_url');
+                                                                                            } ?>" placeholder="Enter a valid link">
+
+                <button class="btn btn-primary" type="submit">Shorten it</button>
+            </div>
+            <div class="input-group my-4 shadow">
+                <span class="input-group-text bg-danger text-white"><?= WEB_ADDRESS; ?>/</span>
+                <input type="text" class="form-control" minlength="1" maxlength="256" name="short_url" value="<?php if (issv('short_url')) {
+                                                                                                                    esv('short_url');
+                                                                                                                } ?>" placeholder="Enter a custom name Optional">
+            </div>
+
+
+        </form>
+        <span class="btn-group shadow">
+            <a class="btn btn-outline-success" href="analyze.php">Link analysis</a>
+            <a class="btn btn-outline-success" href="easy_shorten.php">Shorten the link easily</a>
+        </span>
     </div>
-    <!-- form -->
-    <form method="post" action="create.php">
-        <input autofocus type="url" name="long_url" value="<?php if (issv('long_url')) {
-                                                                esv('long_url');
-                                                            } ?>" placeholder="یک لینک معتبر وارد کنید"></div>
+    <!-- Other -->
+    <div class="container-fluid bg-info rounded-5 p-5">
+        <div class="row">
+            <div class="col">
 
-        <button type="submit">Shorten it</button>
-        <div><?= WEB_ADDRESS; ?>/</div>
-        <input minlength="1" maxlength="256" name="short_address" value="<?php if (issv('short_address')) {
-                                                                                esv('short_address');
-                                                                            } ?>" placeholder="نام دلخواهی وارد کنید اختیاری">
-
-
-        <a href="analyze.php">Link analysis</a>
-        <a href="easy_shorten.php">Shorten the link easily</a>
-    </form>
-    <!-- other -->
-    <h2>More than a link shortener</h2>
-    <p>Owl lets you know more about click through links. We offer you a huge marketing tool with an advanced URL tracking system for free and without any hidden obligations. Why? Because we believe the best things should be free.</p>
-
-
-    <h2>Link management platform</h2>
-    <p>Optimize and customize each short URL to get the most out of it. Set your nickname (name), use it in affiliate programs. For example, in virtual networks and various messengers, both internal and external, without restrictions.</p>
-
-    <h2>Detailed analysis</h2>
-    <p>Linking each shortened link in real time and measuring its performance to understand it. Detailed analysis provides information about clicks, social media clicks, page visitors, devices, browsers, systems, geographic location.</p>
-    <h2>URL shortener</h2>
-    <p>Free custom URL shortener with many features that give you better quality for shortening links. Shortened URLs never expire. We do not display ads when redirecting directly to the original URL.</p>
-    <!-- go to top -->
-    <a id="up" href="#header"></a>
-    <!-- footer -->
-    <h3>Copyright © 2020-<?= date('Y'); ?> by All rights reserved</h3>
-    <script>
-        window.onscroll = function() {
-            scrollFunction();
-        };
-
-        function scrollFunction() {
-            var scroll = document.documentElement.scrollTop;
-            if (scroll < 50) {
-                document.getElementById('up').style.display = "none";
-            } else {
-                document.getElementById('up').style.display = "inline";
-            }
-        }
-    </script>
+                <h2 class="audiowide h-120">More than a link shortener</h2>
+                <p>Owl lets you know more about click through links. We offer you a huge marketing tool with an advanced URL
+                    tracking system for free and without any hidden obligations. Why? Because we believe the best things should be
+                    free.</p>
+            </div>
+            <div class="col">
+                <h2 class="audiowide h-120">Link management platform</h2>
+                <p>Optimize and customize each short URL to get the most out of it. Set your nickname (name), use it in affiliate
+                    programs. For example, in virtual networks and various messengers, both internal and external, without
+                    restrictions.</p>
+            </div>
+            <div class="col">
+                <h2 class="audiowide h-120">Detailed analysis</h2>
+                <p>Linking each shortened link in real time and measuring its performance to understand it. Detailed analysis
+                    provides information about clicks, social media clicks, page visitors, devices, browsers, systems, geographic
+                    location.</p>
+            </div>
+            <div class="col">
+                <h2 class="audiowide h-120">URL shortener</h2>
+                <p>Free custom URL shortener with many features that give you better quality for shortening links. Shortened URLs
+                    never expire. We do not display ads when redirecting directly to the original URL.</p>
+            </div>
+        </div>
+    </div>
+    <!-- Footer -->
+    <footer class="audiowide bg-dark text-white p-3 text-center  border-top border-5 border-primary">Copyright © 2020-<?= date('Y'); ?> by All rights reserved
+    </footer>
 </body>
 
 </html>
