@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /analyze.php
+Allow: /easy_shorten.php
+Allow: /index.php
+Disallow: /
