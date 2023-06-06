@@ -19,7 +19,7 @@ if (is_post()) {
 	$db = new Connection(HOST_NAME, USER_NAME, USER_PASSWORD, DATABASE_NAME);
 
 	if (!isset($_POST['link'])) {
-		analyze_finish();
+		analyze_finish('error');
 	}
 
 	$_SESSION['link'] = $_POST['link'];
@@ -35,13 +35,13 @@ if (is_post()) {
 
 		// If $link value is empty
 		$_SESSION["error"] = "Enter the desired link";
-		analyze_finish();
+		analyze_finish('error');
 	}
 	if (!Security::webAddressValidate($link) || strpos($link, WEB_ADDRESS) !== 0) {
 
 		// Check $link value for wrong address
 		$_SESSION["error"] = "You entered the wrong link";
-		analyze_finish();
+		analyze_finish('error');
 	}
 
 	// Remove main web address from link
@@ -58,7 +58,7 @@ if (is_post()) {
 	if (empty($link_status)) {
 
 		$_SESSION["error"] = "You entered the wrong link";
-		analyze_finish();
+		analyze_finish('error');
 	}
 
 	// Get data for user
@@ -67,5 +67,5 @@ if (is_post()) {
 	$_SESSION['visit'] = $link_status[0]['visit'];
 	$_SESSION['last_visit_date'] = $link_status[0]['last_visit_date'];
 	$_SESSION['create_date'] = $link_status[0]['create_date'];
-	analyze_finish();
+	analyze_finish('result');
 }

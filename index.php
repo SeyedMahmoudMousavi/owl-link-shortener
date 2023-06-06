@@ -47,8 +47,8 @@ require_once 'vendor/autoload.php';
         <?php if (issv('new_short_link')) : ?>
             <?php $new_short_link = WEB_ADDRESS . "/" . $_SESSION['new_short_link']; ?>
             <!-- QR code show -->
-            
-            <div id="error" class="alert alert-success alert-dismissible w-75 mx-auto">
+
+            <div id="result" class="alert alert-success alert-dismissible w-75 mx-auto">
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 <p>
                     <?= $new_short_link; ?>
@@ -56,21 +56,23 @@ require_once 'vendor/autoload.php';
                 <img class="img-fluid border border-dark" src="<?= create_qr($new_short_link, WEB_ADDRESS) ?> ">
             </div>
         <?php endif; ?>
+
+        <div id="warning"></div>
         <!-- Created link -->
-        <form method="post" action="core/create.php">
+        <form method="post" action="core/create.php" class="was-validated">
             <div class="input-group my-4 shadow">
                 <span class="input-group-text bg-success text-white">URL : </span>
-                <input class="form-control" autofocus type="text" name="long_url" value="<?php if (issv('long_url')) {
-                                                                                                esv('long_url');
-                                                                                            } ?>" placeholder="Enter a valid link">
+                <input class="form-control" autofocus required type="url" name="long_url" placeholder="Enter a valid link" value="<?php if (issv('long_url')) {
+                                                                                                                                        esv('long_url');
+                                                                                                                                    } ?>">
 
                 <button class="btn btn-primary" type="submit">Shorten it</button>
             </div>
             <div class="input-group my-4 shadow">
                 <span class="input-group-text bg-danger text-white"><?= WEB_ADDRESS; ?>/</span>
-                <input type="text" class="form-control" minlength="1" maxlength="256" name="short_url" value="<?php if (issv('short_url')) {
-                                                                                                                    esv('short_url');
-                                                                                                                } ?>" placeholder="Enter a custom name Optional">
+                <input type="text" class="form-control" minlength="1" maxlength="256" name="short_url" placeholder="Enter a custom name Optional" onkeyup="ajax('core/index_validate.php', myCallBack,'ajax=' + this.value,'POST')" value="<?php if (issv('short_url')) {
+                                                                                                                                                                                                                                                esv('short_url');
+                                                                                                                                                                                                                                            } ?>">
             </div>
 
 
@@ -86,32 +88,54 @@ require_once 'vendor/autoload.php';
             <div class="col">
 
                 <h2 class="audiowide h-120">More than a link shortener</h2>
-                <p>Owl lets you know more about click through links. We offer you a huge marketing tool with an advanced URL
-                    tracking system for free and without any hidden obligations. Why? Because we believe the best things should be
+                <p>Owl lets you know more about click through links. We offer you a huge marketing tool with an advanced
+                    URL
+                    tracking system for free and without any hidden obligations. Why? Because we believe the best things
+                    should be
                     free.</p>
             </div>
             <div class="col">
                 <h2 class="audiowide h-120">Link management platform</h2>
-                <p>Optimize and customize each short URL to get the most out of it. Set your nickname (name), use it in affiliate
-                    programs. For example, in virtual networks and various messengers, both internal and external, without
+                <p>Optimize and customize each short URL to get the most out of it. Set your nickname (name), use it in
+                    affiliate
+                    programs. For example, in virtual networks and various messengers, both internal and external,
+                    without
                     restrictions.</p>
             </div>
             <div class="col">
                 <h2 class="audiowide h-120">Detailed analysis</h2>
-                <p>Linking each shortened link in real time and measuring its performance to understand it. Detailed analysis
-                    provides information about clicks, social media clicks, page visitors, devices, browsers, systems, geographic
+                <p>Linking each shortened link in real time and measuring its performance to understand it. Detailed
+                    analysis
+                    provides information about clicks, social media clicks, page visitors, devices, browsers, systems,
+                    geographic
                     location.</p>
             </div>
             <div class="col">
                 <h2 class="audiowide h-120">URL shortener</h2>
-                <p>Free custom URL shortener with many features that give you better quality for shortening links. Shortened URLs
+                <p>Free custom URL shortener with many features that give you better quality for shortening links.
+                    Shortened URLs
                     never expire. We do not display ads when redirecting directly to the original URL.</p>
             </div>
         </div>
     </div>
     <!-- Footer -->
-    <footer class="audiowide bg-dark text-white p-3 text-center  border-top border-5 border-primary">Copyright © 2020-<?= date('Y'); ?> by All rights reserved
+    <footer class="audiowide bg-dark text-white p-3 text-center  border-top border-5 border-primary">Copyright ©
+        2020-<?= date('Y'); ?> by All rights reserved
     </footer>
+    <script src="modules/ajaxFunc.js"></script>
+    <script src="modules/mainAjax.js"></script>
+    <!-- <script>
+        function myCallBack(str) {
+            let e = document.getElementById("warning");
+            let pre = `div class="alert alert-warning alert-dismissible w-75 mx-auto">
+  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  <p>;`;
+            let suf = `</p></div>`;
+
+            console.log(e);
+            e.innerHTML = pre + str + suf;
+        }
+    </script> -->
 </body>
 
 </html>

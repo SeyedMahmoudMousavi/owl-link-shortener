@@ -5,16 +5,16 @@
  */
 
 // Redirect to index.php page 
-function finish()
+function finish($tag_id)
 {
-    change_url(WEB_ADDRESS . '/#error');
+    change_url(WEB_ADDRESS . "/#$tag_id");
     die;
 }
 
 // Redirect to analyze.php page 
-function analyze_finish()
+function analyze_finish($tag_id)
 {
-    change_url(WEB_ADDRESS . '/analyze.php#error');
+    change_url(WEB_ADDRESS . "/analyze.php#$tag_id");
     die;
 }
 

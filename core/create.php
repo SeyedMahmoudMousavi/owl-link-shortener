@@ -20,7 +20,7 @@ session_start();
 $db = new Connection(HOST_NAME, USER_NAME, USER_PASSWORD, DATABASE_NAME);
 
 if (!isset($_REQUEST['long_url']) || !isset($_REQUEST['short_url'])) {
-    finish();
+    finish('error');
 }
 
 $_SESSION['long_url'] = $_REQUEST['long_url'];
@@ -33,15 +33,22 @@ $long_url = trim($long_url, '/');
 // Check for null data
 if (et($long_url)) {
 
-    $_SESSION['error'] = 'Enter the desired link';
-    finish();
+    $_SESSION['error'] = 'You entered the wrong link';
+    finish('error');
 }
 
 // Check $long_url for validating
 if (!Security::webAddressValidate($long_url)) {
 
     $_SESSION['error'] = 'You entered the wrong link';
-    finish();
+    finish('error');
+}
+
+// Check $long_url for string length
+if (strlen($long_url) > 2000) {
+
+    $_SESSION['error'] = 'Sorry you entered very long link';
+    finish('error');
 }
 
 // Check short address
@@ -56,14 +63,21 @@ if (et($short_url)) {
 if (!Security::patternString($short_url, ALLCHARS)) {
     $_SESSION['error'] =
         'The desired name is not allowed';
-    finish();
+    finish('error');
+}
+
+// Check $long_url for string length
+if (strlen($short_url) > 255) {
+
+    $_SESSION['error'] = 'Sorry you entered very long string';
+    finish('error');
 }
 
 // Check $short_url for confilit and duplication
 if ($short_url === $db->find("short_url", "link", "short_url='$short_url'")) {
     $_SESSION['error'] =
         'The desired name exists, please enter another name';
-    finish();
+    finish('error');
 }
 
 $not_allowed_list = ['.htaccess', 'analyze.php', 'create.php', 'easy_shorten.php', 'get_status.php', 'index.php', 'redirect.php'];
@@ -72,7 +86,7 @@ foreach ($not_allowed_list as $value) {
     if ($short_url === $value) {
         $_SESSION['error'] =
             'The desired name is not allowed';
-        finish();
+        finish('error');
     }
 }
 
@@ -92,4 +106,4 @@ if ($result) {
     $_SESSION["new_short_link"] = $short_url;
 }
 
-finish();
+finish('result');

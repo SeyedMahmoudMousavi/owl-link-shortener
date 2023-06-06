@@ -33,7 +33,7 @@ require_once 'vendor/autoload.php';
     </div>
     <!-- Link information -->
     <?php if (issv("long_url")) : ?>
-        <div class="container-fluid bg-warning rounded-5 p-5 mt-3 shadow border border-5 border-dark">
+        <div id="result" class="container-fluid bg-warning rounded-5 p-5 mt-3 shadow border border-5 border-dark">
             <div class="row">
                 <div class="col">
                     <h3 class="audiowide text-center">last visit</h3>
@@ -81,9 +81,9 @@ require_once 'vendor/autoload.php';
         <form method="POST" action="core/get_status.php">
             <div class="input-group my-4 shadow">
                 <span class="input-group-text bg-success text-white">URL : </span>
-                <input class="form-control" type="text" autofocus placeholder="Enter a valid link" name="link" value="<?php if (issv('link')) {
-                                                                                                                            esv('link');
-                                                                                                                        } ?>">
+                <input class="form-control" type="url" autofocus required placeholder="Enter a valid link" name="link" value="<?php if (issv('link')) {
+                                                                                                                                    esv('link');
+                                                                                                                                } ?>">
                 <button class="btn btn-primary" type="submit">Check it out</button>
             </div>
         </form>

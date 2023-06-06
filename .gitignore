@@ -1,6 +1,5 @@
 old/
 vendor/
-core/
 resources/demo.html
 templates/
 test.php
