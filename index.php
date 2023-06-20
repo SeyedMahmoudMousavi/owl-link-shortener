@@ -61,16 +61,16 @@ require_once 'vendor/autoload.php';
         <!-- Created link -->
         <form method="post" action="core/create.php" class="was-validated">
             <div class="input-group my-4 shadow">
-                <span class="input-group-text bg-success text-white">URL : </span>
-                <input class="form-control" autofocus required type="url" name="long_url" placeholder="Enter a valid link" value="<?php if (issv('long_url')) {
-                                                                                                                                        esv('long_url');
-                                                                                                                                    } ?>">
+                <label class="input-group-text bg-success text-white" for="long_url">URL : </label>
+                <input class="form-control" autofocus required type="url" id="long_url" name="long_url" placeholder="Enter a valid link" value="<?php if (issv('long_url')) {
+                                                                                                                                                    esv('long_url');
+                                                                                                                                                } ?>">
 
                 <button class="btn btn-primary" type="submit">Shorten it</button>
             </div>
             <div class="input-group my-4 shadow">
-                <span class="input-group-text bg-danger text-white"><?= WEB_ADDRESS; ?>/</span>
-                <input type="text" class="form-control" minlength="1" maxlength="256" name="short_url" placeholder="Enter a custom name Optional" onkeyup="ajax('core/index_validate.php', myCallBack,'ajax=' + this.value,'POST')" value="<?php if (issv('short_url')) {
+                <label class="input-group-text bg-danger text-white" for="short_url"><?= WEB_ADDRESS; ?>/</label>
+                <input type="text" class="form-control" minlength="1" maxlength="256" id="short_url" name="short_url" placeholder="Enter a custom name Optional" onkeyup="ajax('core/index_validate.php', myCallBack,'ajax=' + this.value,'POST')" value="<?php if (issv('short_url')) {
                                                                                                                                                                                                                                                 esv('short_url');
                                                                                                                                                                                                                                             } ?>">
             </div>
