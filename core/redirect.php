@@ -4,18 +4,17 @@ session_start();
 /**
  * Add IRON ELEPHANT library to project
  */
-require_once __DIR__ . "/../main.php";
-require_once '../vendor/autoload.php';
+require_once '../alternative_func.php';
 
-use IronElephant\Connection;
-use IronElephant\Security;
+use Codecrafted\IronElephant\DB;
+use Codecrafted\IronElephant\Validate;
 
 // Connect to database
-$db = new Connection(HOST_NAME, USER_NAME, USER_PASSWORD, DATABASE_NAME);
+$db = new DB(HOST_NAME, USER_NAME, USER_PASSWORD, DATABASE_NAME);
 
 // Check and sanitize sufix uri 
 $uri = $_SERVER['REQUEST_URI'];
-$uri = Security::inputTest($uri);
+$uri = Validate::inputTest($uri);
 $uri = trim($_SERVER['REQUEST_URI'], "/");
 
 // If short suffix uri is empty return to home
@@ -29,7 +28,7 @@ $long_url = urldecode($long_url);
 
 // If long url is not found this addres is wrong
 if (et($long_url)) {
-	$_SESSION["error"] = "There is no address";
+	error("There is no address");
 	finish();
 } else {
 
@@ -52,6 +51,6 @@ if (et($long_url)) {
 	);
 
 	// Redirect to original link
-	change_url($long_url);
+	redirect($long_url);
 	die;
 }

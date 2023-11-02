@@ -1,21 +1,36 @@
 <?php
 
+require_once 'vendor/codecrafted/iron-elephant/src/heart.php';
+require_once 'vendor/autoload.php';
+require_once 'config.php';
+
+
 /**
  * Add your custom functions
  */
 
+
 // Redirect to index.php page 
-function finish($tag_id)
+function finish($tag_id = '')
 {
-    change_url(WEB_ADDRESS . "/#$tag_id");
+    redirect(WEB_ADDRESS . "/#$tag_id");
     die;
 }
 
 // Redirect to analyze.php page 
 function analyze_finish($tag_id)
 {
-    change_url(WEB_ADDRESS . "/analyze.php#$tag_id");
+    redirect(WEB_ADDRESS . "/analyze.php#$tag_id");
     die;
+}
+
+function et(string $str)
+{
+    if (empty(trim($str))) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 
@@ -25,29 +40,32 @@ function analyze_finish($tag_id)
 
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
-use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
-use Endroid\QrCode\Label\Alignment\LabelAlignmentCenter;
+use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\Label\LabelAlignment;
 use Endroid\QrCode\Label\Font\NotoSans;
-use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeMargin;
+use Endroid\QrCode\RoundBlockSizeMode;
 use Endroid\QrCode\Writer\PngWriter;
 
-function create_qr(string $url, string $label)
+function qr($value, $label)
 {
+
     $result = Builder::create()
         ->writer(new PngWriter())
         ->writerOptions([])
-        ->data($url)
+        ->data($value)
         ->encoding(new Encoding('UTF-8'))
-        ->errorCorrectionLevel(new ErrorCorrectionLevelHigh())
+        ->errorCorrectionLevel(ErrorCorrectionLevel::High)
         ->size(300)
         ->margin(10)
-        ->roundBlockSizeMode(new RoundBlockSizeModeMargin())
-        ->logoPath("resources/fav/favicon-32x32.png")
+        ->roundBlockSizeMode(RoundBlockSizeMode::Margin)
+        ->logoPath(__DIR__ . '/resources/fav/android-chrome-512x512.png')
+        ->logoResizeToWidth(50)
+        ->logoPunchoutBackground(true)
         ->labelText($label)
         ->labelFont(new NotoSans(20))
-        ->labelAlignment(new LabelAlignmentCenter())
+        ->labelAlignment(LabelAlignment::Center)
         ->validateResult(false)
         ->build();
-
-    return $dataUri = $result->getDataUri();
+    // Generate a data URI to include image data inline (i.e. inside an <img> tag)
+    return $result->getDataUri();
 }

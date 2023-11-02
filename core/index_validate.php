@@ -1,19 +1,18 @@
 <?php
 
-require_once __DIR__ . "/../main.php";
-require_once '../vendor/autoload.php';
+require_once '../alternative_func.php';
 
-use IronElephant\Connection;
-use IronElephant\Security;
+use Codecrafted\IronElephant\DB;
+use Codecrafted\IronElephant\Validate;
 
 if (is_post()) {
 
-    $db = new Connection(HOST_NAME, USER_NAME, USER_PASSWORD, DATABASE_NAME);
+    $db = new DB(HOST_NAME, USER_NAME, USER_PASSWORD, DATABASE_NAME);
 
-    $short_url = $_POST['ajax'];
-    $short_url = Security::inputTest($short_url);
+    $short_url = post('ajax');
+    $short_url = Validate::inputTest($short_url);
 
-    if (!et($short_url) && Security::patternString($short_url, ALLCHARS)) {
+    if (!et($short_url) && Validate::patternString($short_url, ALLCHARS)) {
 
         if ($db->find('short_url', 'link', "short_url='$short_url'") === $short_url) {
             echo "This short name has already been taken, please select another name";

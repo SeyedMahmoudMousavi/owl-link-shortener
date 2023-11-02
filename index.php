@@ -1,10 +1,7 @@
 <?php
 session_start();
-/**
- * Add IRON ELEPHANT library to project
- */
-require_once __DIR__ . "/main.php";
-require_once 'vendor/autoload.php';
+
+require_once "alternative_func.php";
 ?>
 <!DOCTYPE html>
 <html>
@@ -35,17 +32,17 @@ require_once 'vendor/autoload.php';
     <div class="container-fluid bg-light p-5 rounded-5 text-center mt-2">
 
         <!-- Error -->
-        <?php if (issv("error")) : ?>
+        <?php if (error()) : ?>
             <div id="error" class="alert alert-danger alert-dismissible w-75 mx-auto">
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 <p>
-                    <?= rsv("error"); ?>
+                    <?= error(); ?>
                 </p>
             </div>
         <?php endif; ?>
         <!-- New link -->
-        <?php if (issv('new_short_link')) : ?>
-            <?php $new_short_link = WEB_ADDRESS . "/" . $_SESSION['new_short_link']; ?>
+        <?php if (session('new_short_link')) : ?>
+            <?php $new_short_link = WEB_ADDRESS . "/" . session('new_short_link'); ?>
             <!-- QR code show -->
 
             <div id="result" class="alert alert-success alert-dismissible w-75 mx-auto">
@@ -53,7 +50,7 @@ require_once 'vendor/autoload.php';
                 <p>
                     <?= $new_short_link; ?>
                 </p>
-                <img class="img-fluid border border-dark" src="<?= create_qr($new_short_link, WEB_ADDRESS) ?> ">
+                <img class="img-fluid border border-dark" src="<?= qr($new_short_link, WEB_ADDRESS) ?> ">
             </div>
         <?php endif; ?>
 
@@ -62,17 +59,17 @@ require_once 'vendor/autoload.php';
         <form method="post" action="core/create.php" class="was-validated">
             <div class="input-group my-4 shadow">
                 <label class="input-group-text bg-success text-white" for="long_url">URL : </label>
-                <input class="form-control" autofocus required type="url" id="long_url" name="long_url" placeholder="Enter a valid link" value="<?php if (issv('long_url')) {
-                                                                                                                                                    esv('long_url');
+                <input class="form-control" autofocus required type="url" id="long_url" name="long_url" placeholder="Enter a valid link" value="<?php if (session('long_url')) {
+                                                                                                                                                    e_session('long_url');
                                                                                                                                                 } ?>">
 
                 <button class="btn btn-primary" type="submit">Shorten it</button>
             </div>
             <div class="input-group my-4 shadow">
                 <label class="input-group-text bg-danger text-white" for="short_url"><?= WEB_ADDRESS; ?>/</label>
-                <input type="text" class="form-control" minlength="1" maxlength="256" id="short_url" name="short_url" placeholder="Enter a custom name Optional" onkeyup="ajax('core/index_validate.php', myCallBack,'ajax=' + this.value,'POST')" value="<?php if (issv('short_url')) {
-                                                                                                                                                                                                                                                esv('short_url');
-                                                                                                                                                                                                                                            } ?>">
+                <input type="text" class="form-control" minlength="1" maxlength="256" id="short_url" name="short_url" placeholder="Enter a custom name Optional" onkeyup="ajax('core/index_validate.php', myCallBack,'ajax=' + this.value,'POST')" value="<?php if (session('short_url')) {
+                                                                                                                                                                                                                                                                e_session('short_url');
+                                                                                                                                                                                                                                                            } ?>">
             </div>
 
 
@@ -124,18 +121,6 @@ require_once 'vendor/autoload.php';
     </footer>
     <script src="modules/ajaxFunc.js"></script>
     <script src="modules/mainAjax.js"></script>
-    <!-- <script>
-        function myCallBack(str) {
-            let e = document.getElementById("warning");
-            let pre = `div class="alert alert-warning alert-dismissible w-75 mx-auto">
-  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-  <p>;`;
-            let suf = `</p></div>`;
-
-            console.log(e);
-            e.innerHTML = pre + str + suf;
-        }
-    </script> -->
 </body>
 
 </html>

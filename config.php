@@ -1,15 +1,22 @@
 <?php
-/**
- * Set minimum php version to run
- * @var int MINIMUM_PHP_VERSION Set minimum php version to run
- */
-define("MINIMUM_PHP_VERSION",7.4);
+
+date_default_timezone_set("asia/tehran");
 
 /**
- * Set your default time zone
- *  @var string TIME_ZONE Set default time zone
+ * @var string WEB_ADDRESS Create const web address
  */
-define("TIME_ZONE", "asia/tehran");
+if ($_SERVER['SERVER_PORT'] === 443) {
+	define(
+		'WEB_ADDRESS',
+		'https://' . $_SERVER["HTTP_HOST"]
+	);
+}
+else{
+	define(
+		'WEB_ADDRESS',
+		'http://' . $_SERVER["HTTP_HOST"]
+	);
+}
 
 /**
  * @var string LOWERCHARS Define const lower char free to use
@@ -35,14 +42,6 @@ define("BASICCHARS", LOWERCHARS . UPPERCHARS . NUMBERCHARS);
  * @var string ALLCHARS Define const all char free to use
  */
 define("ALLCHARS", BASICCHARS . OTHERCHARS);
-
-
-/**
- * @var string SALT Create salt for password hashing create salt by call createSalt() function 
- * @example createSalt(16) "a5d4ASDA132asdsa"
- */
-define("SALT","6XBsxJGk3cPONBz3vArHS5jzjKwh2T55");
-
 
 /**
  * Database config variable

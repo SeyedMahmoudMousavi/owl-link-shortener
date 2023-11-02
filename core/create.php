@@ -3,10 +3,11 @@
 /**
  * Add IRON ELEPHANT library to project
  */
-require_once __DIR__ . "/../main.php";
-require_once '../vendor/autoload.php';
+require_once '../alternative_func.php';
 
-use IronElephant\Connection, IronElephant\Security;
+use Codecrafted\IronElephant\DB;
+use Codecrafted\IronElephant\Validate;
+
 
 session_start();
 
@@ -17,42 +18,42 @@ session_start();
  */
 
 // Connect to database
-$db = new Connection(HOST_NAME, USER_NAME, USER_PASSWORD, DATABASE_NAME);
+$db = new DB(HOST_NAME, USER_NAME, USER_PASSWORD, DATABASE_NAME);
 
-if (!isset($_REQUEST['long_url']) || !isset($_REQUEST['short_url'])) {
+if (is_null(request('long_url')) || is_null(request('short_url'))) {
     finish('error');
 }
 
-$_SESSION['long_url'] = $_REQUEST['long_url'];
-$_SESSION['short_url'] = $_REQUEST['short_url'];
+session('long_url', request('long_url'));
+session('short_url',request('short_url'));
 
 // Testing long url 
-$long_url = Security::inputTest($_REQUEST['long_url']);
+$long_url = Validate::inputTest(request('long_url'));
 $long_url = trim($long_url, '/');
 
 // Check for null data
 if (et($long_url)) {
 
-    $_SESSION['error'] = 'You entered the wrong link';
+    error('You entered the wrong link');
     finish('error');
 }
 
 // Check $long_url for validating
-if (!Security::webAddressValidate($long_url)) {
+if (!Validate::webAddressValidate($long_url)) {
 
-    $_SESSION['error'] = 'You entered the wrong link';
+    error('You entered the wrong link');
     finish('error');
 }
 
 // Check $long_url for string length
 if (strlen($long_url) > 2000) {
 
-    $_SESSION['error'] = 'Sorry you entered very long link';
+    error('Sorry you entered very long link');
     finish('error');
 }
 
 // Check short address
-$short_url = Security::inputTest($_REQUEST['short_url']);
+$short_url = Validate::inputTest(request('short_url'));
 
 // Cehck empty $short_url and generate new string number
 if (et($short_url)) {
@@ -60,23 +61,23 @@ if (et($short_url)) {
 }
 
 // Check $short_url for valid string
-if (!Security::patternString($short_url, ALLCHARS)) {
-    $_SESSION['error'] =
-        'The desired name is not allowed';
+if (!Validate::patternString($short_url, ALLCHARS)) {
+    error('The desired name is not allowed');
     finish('error');
 }
 
 // Check $long_url for string length
 if (strlen($short_url) > 255) {
 
-    $_SESSION['error'] = 'Sorry you entered very long string';
+    error('Sorry you entered very long string');
     finish('error');
 }
 
 // Check $short_url for confilit and duplication
 if ($short_url === $db->find("short_url", "link", "short_url='$short_url'")) {
-    $_SESSION['error'] =
-        'The desired name exists, please enter another name';
+    error(
+        'The desired name exists, please enter another name'
+    );
     finish('error');
 }
 
@@ -84,8 +85,9 @@ $not_allowed_list = ['.htaccess', 'analyze.php', 'create.php', 'easy_shorten.php
 
 foreach ($not_allowed_list as $value) {
     if ($short_url === $value) {
-        $_SESSION['error'] =
-            'The desired name is not allowed';
+        error(
+            'The desired name is not allowed'
+        );
         finish('error');
     }
 }
@@ -103,7 +105,7 @@ $result =  $db->insert(
 );
 
 if ($result) {
-    $_SESSION["new_short_link"] = $short_url;
+    session("new_short_link", $short_url);
 }
 
 finish('result');

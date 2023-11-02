@@ -3,3 +3,4 @@ vendor/
 resources/demo.html
 templates/
 test.php
+composer.lock

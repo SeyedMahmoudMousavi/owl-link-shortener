@@ -5,42 +5,41 @@ session_start();
 /**
  * Add IRON ELEPHANT library to project
  */
-require_once __DIR__ . "/../main.php";
-require_once '../vendor/autoload.php';
+require_once '../alternative_func.php';
 
-use IronElephant\Connection;
-use IronElephant\Security;
+use Codecrafted\IronElephant\DB;
+use Codecrafted\IronElephant\Validate;
 
 
 
 if (is_post()) {
 
 	// Connect to database
-	$db = new Connection(HOST_NAME, USER_NAME, USER_PASSWORD, DATABASE_NAME);
+	$db = new DB(HOST_NAME, USER_NAME, USER_PASSWORD, DATABASE_NAME);
 
-	if (!isset($_POST['link'])) {
+	if (is_null(post('link'))) {
 		analyze_finish('error');
 	}
 
-	$_SESSION['link'] = $_POST['link'];
+	session('link', post('link'));
 
 	// Get link from analyze.php file
-	$link = $_POST['link'];
+	$link = post('link');
 
 	// Testing link
-	$link = Security::inputTest($link);
+	$link = Validate::inputTest($link);
 	$link = trim($link, "/");
 
 	if (et($link)) {
 
 		// If $link value is empty
-		$_SESSION["error"] = "Enter the desired link";
+		error("Enter the desired link");
 		analyze_finish('error');
 	}
-	if (!Security::webAddressValidate($link) || strpos($link, WEB_ADDRESS) !== 0) {
+	if (!Validate::webAddressValidate($link) || strpos($link, WEB_ADDRESS) !== 0) {
 
 		// Check $link value for wrong address
-		$_SESSION["error"] = "You entered the wrong link";
+		error("You entered the wrong link");
 		analyze_finish('error');
 	}
 
@@ -57,7 +56,7 @@ if (is_post()) {
 	// If short url not found
 	if (empty($link_status)) {
 
-		$_SESSION["error"] = "You entered the wrong link";
+		error("You entered the wrong link");
 		analyze_finish('error');
 	}
 

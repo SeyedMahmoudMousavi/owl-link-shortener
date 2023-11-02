@@ -3,8 +3,7 @@ session_start();
 /**
  * Add IRON ELEPHANT library to project
  */
-require_once __DIR__ . "/main.php";
-require_once 'vendor/autoload.php';
+require_once "alternative_func.php";
 ?>
 <!DOCTYPE html>
 <html>
